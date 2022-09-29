@@ -1,4 +1,5 @@
 # Neural-IMLS
+
 The offical implentation of [Neural-IMLS](https://arxiv.org/abs/2109.04398)
 
 ## Introduction
@@ -9,8 +10,7 @@ It allows to train, test and evaluate the tasks of surface reconstruction.
 
 We provide the code for training a new model and test that model on your own data. Besides, we provie some reconstruction results of our method.
 
-
-![insight](assets/insight.pdf)
+![insight](assets/insight.png)
 
 ### Requirements
 
@@ -31,7 +31,7 @@ To train model to overfit one shape, run this command:
 ```python
 python train.py --pts_dir <path_to_data> --name <experiment_name>
 
-For example:
+# For example:
 python train.py --pts_dir data/ori_bunny.xyz.npy --name famous_ori_bunny --patch_radius 0.03 --points_per_patch_max 100
 ```
 
@@ -42,15 +42,17 @@ To evaluate model, run:
 ```python
 python test.py --model_path <path_to_trained_model> --name <experiment_name> --mesh_path <path_to_gt_mesh>
 
-For example:
+# For example:
 python test.py --model_path experiment/famous_noisefree_Armadillo/epoch_35.pth --name famous_noisefree_Armadillo --mesh_path mesh/Armadillo.obj
 ```
 
 ### Results
 
-Our surface reconstruction results (meshes) on SRB (The Surface Reconstruction Benchmark from [DGP](https://github.com/fwilliams/deep-geometric-prior)) are available for download [here]().
+Our surface reconstruction results (meshes) on SRB (The Surface Reconstruction Benchmark from [DGP](https://github.com/fwilliams/deep-geometric-prior)) are available for download [here](https://www.dropbox.com/sh/v0265pnqiv9gctb/AACivNvhGjeXw3SEtYo06sOXa?dl=0).
 
-Our surface reconstruction results (meshes) on ABC no.n, ABC var.n, FAMOUS no.n, FAMOUS med.n (data preprocessed by [Points2Surf](https://github.com/ErlerPhilipp/points2surf)) are available for download [here]().
+Our surface reconstruction results (meshes) on ABC no.n, ABC var.n, FAMOUS no.n, FAMOUS med.n, FAMOUS sparse, FAMOUS dense, Thingi10k no.n, 
+
+Thingi10k med.n, Thingi10k sparse, Thingi10k dense (data preprocessed by [Points2Surf](https://github.com/ErlerPhilipp/points2surf)) are available for download [here](https://www.dropbox.com/sh/qzb7013o4a3yktl/AAB5yOY91h8MJban4JiHW1Iea?dl=0).
 
 ### Citation
 
