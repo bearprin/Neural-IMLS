@@ -50,9 +50,7 @@ python test.py --model_path experiment/famous_noisefree_Armadillo/epoch_35.pth -
 
 Our surface reconstruction results (meshes) on SRB (The Surface Reconstruction Benchmark from [DGP](https://github.com/fwilliams/deep-geometric-prior)) are available for download [here](https://www.dropbox.com/sh/v0265pnqiv9gctb/AACivNvhGjeXw3SEtYo06sOXa?dl=0).
 
-Our surface reconstruction results (meshes) on ABC no.n, ABC var.n, FAMOUS no.n, FAMOUS med.n, FAMOUS sparse, FAMOUS dense, Thingi10k no.n, 
-
-Thingi10k med.n, Thingi10k sparse, Thingi10k dense (data preprocessed by [Points2Surf](https://github.com/ErlerPhilipp/points2surf)) are available for download [here](https://www.dropbox.com/sh/qzb7013o4a3yktl/AAB5yOY91h8MJban4JiHW1Iea?dl=0).
+Our surface reconstruction results (meshes) on ABC no.n, ABC var.n, FAMOUS no.n, FAMOUS med.n, FAMOUS sparse, FAMOUS dense, Thingi10k no.n, Thingi10k med.n, Thingi10k sparse, Thingi10k dense (data preprocessed by [Points2Surf](https://github.com/ErlerPhilipp/points2surf)) are available for download [here](https://www.dropbox.com/sh/qzb7013o4a3yktl/AAB5yOY91h8MJban4JiHW1Iea?dl=0).
 
 ### Citation
 
