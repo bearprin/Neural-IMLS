@@ -10,7 +10,7 @@ It allows to train, test and evaluate the tasks of surface reconstruction.
 
 We provide the code for training a new model and test that model on your own data. Besides, we provie some reconstruction results of our method.
 
-![insight](assets/insight.png)
+![insight](assets/insight.jpg)
 
 ### Requirements
 
