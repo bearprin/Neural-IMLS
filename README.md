@@ -1,6 +1,8 @@
 # Neural-IMLS
 
-The offical implentation of [Neural-IMLS](https://arxiv.org/abs/2109.04398)
+The offical implentation of Neural-IMLS.
+
+[Arxiv](https://arxiv.org/abs/2109.04398)
 
 ## Introduction
 
