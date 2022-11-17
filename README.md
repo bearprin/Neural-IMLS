@@ -60,8 +60,8 @@ If you use our work, please cite our paper:
 
 ```bibtex
 @misc{2109.04398,
-    Author = {Zixiong Wang and Pengfei Wang and Qiujie Dong and Junjie Gao and Shuangmin Chen and Shiqing Xin and Changhe Tu and Wenping Wang},
-    Title = {Neural-IMLS: Learning Implicit Moving Least-Squares for Surface Reconstruction from Point Clouds},
+    Author = {Zixiong Wang and Pengfei Wang and Pengshuai Wang and Qiujie Dong and Junjie Gao and Shuangmin Chen and Shiqing Xin and Changhe Tu and Wenping Wang},
+    Title = {Neural-IMLS: Self-supervised Implicit Moving Least-Squares Network for Surface Reconstruction},
     Year = {2022},
     Eprint = {arXiv:2109.04398},
 }
