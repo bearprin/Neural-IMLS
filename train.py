@@ -182,7 +182,8 @@ if __name__ == '__main__':
                         vertices, faces, _, _ = measure.marching_cubes(vox, thresh)
                         mc_flag = True
                         # save query result
-                        mesh = trimesh.Trimesh(vertices=vertices, faces=faces, process=False)
+                        mesh = normalize_mesh_export(trimesh.Trimesh(vertices=vertices, faces=faces, process=False),
+                                                     get_scale=False)
                         # recover scale based on input (may not align with gt well)
                         mesh.apply_transform(train_ds.input_scale_inv)
                         mesh.apply_transform(train_ds.input_trans_inv)

@@ -34,23 +34,23 @@ def normalize_mesh_export(mesh, file_out=None, get_scale=True):
 
     # translate to origin
     translation = (mesh.bounds[0] + mesh.bounds[1]) * 0.5
-    translation = trimesh.transformations.translation_matrix(direction=-translation)
-    mesh.apply_transform(translation)
+    translation_matrix = trimesh.transformations.translation_matrix(direction=-translation)
+    mesh.apply_transform(translation_matrix)
 
     # scale to unit cube
     scale = 1.0 / bounds.max()
-    scale_trafo = trimesh.transformations.scale_matrix(factor=scale)
-    mesh.apply_transform(scale_trafo)
+    scale_tra = trimesh.transformations.scale_matrix(factor=scale)
+    mesh.apply_transform(scale_tra)
     if file_out is not None:
         mesh.export(file_out)
     if get_scale:
-        scale_trafo_inv = trimesh.transformations.scale_matrix(factor=1.0 / scale)
-        translation_inv = trimesh.transformations.translation_matrix(direction=translation)
+        scale_trafo_inv = np.linalg.inv(scale_tra)
+        translation_inv = np.linalg.inv(translation_matrix)
         return mesh, scale_trafo_inv, translation_inv
     return mesh
 
 
-def _revert_normalization(mesh_rec, mesh_gt):
+def revert_normalization(mesh_rec, mesh_gt):
     '''
     recover the scale of mesh_rec based on mesh_gt
     Args:
@@ -106,8 +106,6 @@ def eval_reconstruct_gt_mesh_p2s(rec_mesh: trimesh.Trimesh, gt_mesh: trimesh.Tri
         chamfer_dist = ref_new_dist_sum + new_ref_dist_sum
 
         return chamfer_dist
-
-    rec_mesh = _revert_normalization(rec_mesh, gt_mesh)
 
     chamfer_dist = _chamfer_distance_single_file(rec_mesh, gt_mesh, sample_num)
     return chamfer_dist

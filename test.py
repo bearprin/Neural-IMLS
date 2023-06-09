@@ -12,7 +12,7 @@ import tqdm
 import torch
 from torch.utils import data
 
-from utility import same_seed, eval_reconstruct_gt_mesh_p2s
+from utility import same_seed, eval_reconstruct_gt_mesh_p2s, normalize_mesh_export, revert_normalization
 from network import IDRNet
 from dataset import ValDataset
 
@@ -74,9 +74,11 @@ if __name__ == '__main__':
                 vertices, faces, _, _ = measure.marching_cubes(vox, thresh)
                 ed = time.time()
                 print('Marching: {}s'.format(str(ed - st)))
-                rec_mesh = trimesh.Trimesh(vertices=vertices, faces=faces, process=False)
-                rec_mesh.export(os.path.join('experiment', args.name, 'thresh_' + str(thresh) + '_rec.obj'))
+                rec_mesh = normalize_mesh_export(trimesh.Trimesh(vertices=vertices, faces=faces, process=False),
+                                                 get_scale=False)
                 gt_mesh = trimesh.load(args.mesh_path, process=False)
+                rec_mesh = revert_normalization(rec_mesh, gt_mesh)
+                rec_mesh.export(os.path.join('experiment', args.name, 'thresh_' + str(thresh) + '_rec.obj'))
                 cd = eval_reconstruct_gt_mesh_p2s(rec_mesh, gt_mesh)
                 print('thresh', thresh,
                       'cd', cd,
