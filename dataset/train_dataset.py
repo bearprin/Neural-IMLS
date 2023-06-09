@@ -58,7 +58,10 @@ class PointGenerateDataset(data.Dataset):
         else:
             pnts = trimesh.load(pts_npy_path, process=False).vertices
         # normalize pt
-        pnts = normalize_mesh_export(trimesh.PointCloud(vertices=pnts)).vertices
+        pnts, scale_inv, trans_inv = normalize_mesh_export(trimesh.PointCloud(vertices=pnts))
+        pnts = np.array(pnts.vertices)
+        self.input_scale_inv = scale_inv
+        self.input_trans_inv = trans_inv
         # sample ground truth
         print(pnts.shape)
         if self.gt_pts_num == -1 and pnts.shape[0] > 20000:
@@ -243,6 +246,6 @@ class PointGenerateDataset(data.Dataset):
         support_radius = np.sqrt(bd_diag / self.points_per_patch)
 
         return torch.from_numpy(patch).float(), \
-               torch.from_numpy(query).float(), \
-               torch.from_numpy(support_radius).float(), \
-               torch.from_numpy(proxy).float()
+            torch.from_numpy(query).float(), \
+            torch.from_numpy(support_radius).float(), \
+            torch.from_numpy(proxy).float()

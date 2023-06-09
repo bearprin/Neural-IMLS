@@ -43,7 +43,7 @@ parser.add_argument('--loss', type=str, default='implicit', choices=['projection
                     help='MLS Projection or implicit MLS')
 
 parser.add_argument('--name', type=str, default='base')
-parser.add_argument('--summary_freq', type=int, default=5)
+parser.add_argument('--summary_freq', type=int, default=1)
 parser.add_argument('--epochs', type=int, default=100)
 parser.add_argument('--lr', type=float, default=0.00005)
 parser.add_argument('--num_workers', type=int, default=20)
@@ -116,7 +116,7 @@ if __name__ == '__main__':
 
                 # Gaussian kernel
                 weight_theta = torch.exp(-dist_sq / lambda_p ** 2)  # (1, 5000, k)
-                ## RIMLS 's Style Gaussian Kernel
+                ## RIMLS 's Style Gaussian Kernel for Normal
                 normal_proj_dist = torch.norm(q_grad.unsqueeze(2) - neigh_grad, dim=-1) ** 2
                 weight_phi = torch.exp(-normal_proj_dist / args.sigma_r ** 2)
 
@@ -133,6 +133,16 @@ if __name__ == '__main__':
                     project_dist = ((x.unsqueeze(2) - t) * neigh_grad).sum(3)
                     imls_dist = (project_dist * weight).sum(2, keepdim=True)
                     loss = criterion(imls_dist, sdf)
+
+                # q_moved = q - q_grad * sdf
+                # q_moved_sdf = net(q_moved)
+                # q_moved_sdf.sum().backward(retain_graph=True)
+                # q_moved_grad = q_moved.grad.detach()  # (1, 500, 3)
+                # q_moved_grad = F.normalize(q_moved_grad, dim=2)
+                # consis_constraint = 1 - F.cosine_similarity(q_moved_grad, q_grad, dim=-1)
+                # weight_moved = torch.exp(-10.0 * torch.abs(sdf)).reshape(-1, consis_constraint.shape[-1])
+                # consis_constraint = weight_moved * consis_constraint
+                # loss = loss + 0.01 * consis_constraint.mean()
 
                 optimizer.zero_grad()
                 loss.backward()
@@ -172,5 +182,8 @@ if __name__ == '__main__':
                         vertices, faces, _, _ = measure.marching_cubes(vox, thresh)
                         mc_flag = True
                         # save query result
-                        mesh = normalize_mesh_export(trimesh.Trimesh(vertices=vertices, faces=faces, process=False))
+                        mesh = trimesh.Trimesh(vertices=vertices, faces=faces, process=False)
+                        # recover scale based on input (may not align with gt well)
+                        mesh.apply_transform(train_ds.input_scale_inv)
+                        mesh.apply_transform(train_ds.input_trans_inv)
                         mesh.export(os.path.join('experiment', args.name, str(epoch) + '_' + str(thresh) + '.obj'))

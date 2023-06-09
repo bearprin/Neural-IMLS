@@ -27,7 +27,7 @@ def gradient(points, net, normalize=True):
     return grad
 
 
-def normalize_mesh_export(mesh, file_out=None):
+def normalize_mesh_export(mesh, file_out=None, get_scale=True):
     bounds = mesh.extents
     if bounds.min() == 0.0:
         return
@@ -43,7 +43,38 @@ def normalize_mesh_export(mesh, file_out=None):
     mesh.apply_transform(scale_trafo)
     if file_out is not None:
         mesh.export(file_out)
+    if get_scale:
+        scale_trafo_inv = trimesh.transformations.scale_matrix(factor=1.0 / scale)
+        translation_inv = trimesh.transformations.translation_matrix(direction=translation)
+        return mesh, scale_trafo_inv, translation_inv
     return mesh
+
+
+def _revert_normalization(mesh_rec, mesh_gt):
+    '''
+    recover the scale of mesh_rec based on mesh_gt
+    Args:
+        mesh_rec:
+        mesh_gt:
+
+    Returns:
+
+    '''
+    bounds = mesh_gt.extents
+    if bounds.min() == 0.0:
+        return
+
+    # translate to origin
+    translation = (mesh_gt.bounds[0] + mesh_gt.bounds[1]) * 0.5
+    translation_inv = trimesh.transformations.translation_matrix(direction=translation)
+
+    # scale to unit cube
+    scale = 1.0 / bounds.max()
+    scale_trafo_inv = trimesh.transformations.scale_matrix(factor=1.0 / scale)
+
+    mesh_rec.apply_transform(scale_trafo_inv)
+    mesh_rec.apply_transform(translation_inv)
+    return mesh_rec
 
 
 def eval_reconstruct_gt_mesh_p2s(rec_mesh: trimesh.Trimesh, gt_mesh: trimesh.Trimesh, sample_num=10000):
@@ -76,8 +107,7 @@ def eval_reconstruct_gt_mesh_p2s(rec_mesh: trimesh.Trimesh, gt_mesh: trimesh.Tri
 
         return chamfer_dist
 
-    gt_mesh = normalize_mesh_export(gt_mesh)
-    rec_mesh = normalize_mesh_export(rec_mesh)
+    rec_mesh = _revert_normalization(rec_mesh, gt_mesh)
 
     chamfer_dist = _chamfer_distance_single_file(rec_mesh, gt_mesh, sample_num)
     return chamfer_dist
