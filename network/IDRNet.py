@@ -18,7 +18,7 @@ class IDRNet(nn.Module):
                  scale=1,
                  first=True,
                  geometric_init=True,
-                 weight_norm=False,
+                 weight_norm=True,
                  inside_outside=False):
         super(IDRNet, self).__init__()
         print('skip_in:', skip_in, type(skip_in))
