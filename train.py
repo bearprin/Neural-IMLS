@@ -29,7 +29,7 @@ parser.add_argument('--sub_batch_size', type=int, default=100, help='real_batch_
 parser.add_argument('--sigma_r', type=float, default=0.3)
 parser.add_argument('--multi_support_radius', type=float, default=1)
 parser.add_argument('--multires', type=int, default=0)
-parser.add_argument('--first', type=bool, default=False)
+parser.add_argument('--first', type=bool, default=True)
 parser.add_argument('--gt_pts_num', type=int, default=-1, help='the number of sampled points, -1 means all points')
 parser.add_argument('--query_num', default=None, type=int,
                     help='the number of query points for each input point, None means adaptive')
