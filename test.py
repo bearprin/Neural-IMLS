@@ -18,7 +18,7 @@ from dataset import ValDataset
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--device', type=str, default='cuda')
-parser.add_argument('--bd', help='mc grid points range', type=float, default=0.6)
+parser.add_argument('--bd', help='mc grid points range', type=float, default=0.55)
 parser.add_argument('--resolution', help='mc grid points resolution', type=int, default=128)
 parser.add_argument('--batch_size', type=int, default=32)
 parser.add_argument('--thresholds', help='mc iso values', type=list,

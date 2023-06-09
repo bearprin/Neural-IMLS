@@ -19,7 +19,7 @@ from dataset import ValDataset, SequentialPointCloudRandomPatchSampler, PointGen
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--device', type=str, default='cuda')
-parser.add_argument('--bd', type=float, default=0.6, help='shape bounds')
+parser.add_argument('--bd', type=float, default=0.55, help='shape bounds')
 parser.add_argument('--batch_size', type=int, default=1)
 parser.add_argument('--resolution', help='mc grid points resolution', type=int, default=256)
 parser.add_argument('--thresholds', help='mc iso values', type=list,
