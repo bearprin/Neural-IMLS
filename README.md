@@ -40,10 +40,12 @@ python train.py --pts_dir data/ori_bunny.xyz.npy --name famous_ori_bunny --patch
 
 Here are some important parameters:
 
-- --patch_radius, ball radius nearest neighbor for MLS, large patch radius brings the smoother results
+- --patch_radius, ball radius nearest neighbor (FRNN) for MLS, large patch radius brings the smoother results
 - --points_per_patch_max, max number of points in a ball, collocation with patch radius
 - --k, kth nearest neighbor for MLS, less than 0 means leverage FRNN otherwise KNN
 - --loss, MLS Projection, or implicit MLS. Projection MLS is recommended for some thin structures and single layers geometry, while implicit MLS is recommended for most cases.
+  - Note that we found it should leverage KNN rather than FRNN for projection MLS.
+
 
 ### Test and Evaluation
 

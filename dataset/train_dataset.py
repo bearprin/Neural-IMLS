@@ -69,6 +69,11 @@ class PointGenerateDataset(data.Dataset):
         elif self.gt_pts_num == -1 and pnts.shape[0] < 20000:
             self.gt_pts_num = 20000
         print("gt_pts_num:", self.gt_pts_num)
+        if query_num is None:
+            self.query_num = 1e6 // self.gt_pts_num
+        else:
+            self.query_num = query_num
+        print('query_num per input point:', self.query_num)
         pnts = pnts[self._patch_sampling(pnts, self.gt_pts_num)]
         pnts_pt = torch.from_numpy(pnts).float()
         self.pnts = pnts
@@ -80,7 +85,7 @@ class PointGenerateDataset(data.Dataset):
         sigmas = dist[:, -1].unsqueeze(1)
         # sample query point
         query_point = pnts_pt + sigmas * torch.normal(mean=0.0, std=1.0,
-                                                      size=(query_num, pnts_pt.shape[0], pnts_pt.shape[1])
+                                                      size=(self.query_num, pnts_pt.shape[0], pnts_pt.shape[1])
                                                       )
         query_point = query_point.reshape(1, -1, 3).to(device).float()
         rand_idx = torch.randperm(query_point.shape[1])

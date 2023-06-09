@@ -31,7 +31,7 @@ parser.add_argument('--multi_support_radius', type=float, default=1)
 parser.add_argument('--multires', type=int, default=0)
 parser.add_argument('--first', type=bool, default=False)
 parser.add_argument('--gt_pts_num', type=int, default=-1, help='the number of sampled points, -1 means all points')
-parser.add_argument('--query_num', type=int, default=25)
+parser.add_argument('--query_num', default=None)
 parser.add_argument('--k', type=int, default=-100, help='knn, k')
 parser.add_argument('--patch_radius', type=float, default=0.01, help='ball_query (rnn), radius')
 parser.add_argument('--points_per_patch_max', type=int, default=50, help='ball_query (frnn), max_num')
@@ -39,8 +39,10 @@ parser.add_argument('--pts_dir', type=str, default='data/ori_bunny.xyz.npy')
 parser.add_argument('--beta', type=int, default=1000,
                     help='beta for the softplus (sometimes need to be 0 avoiding over-smooth)')
 parser.add_argument('--skip_in', type=int, default=4)
-parser.add_argument('--loss', type=str, default='implicit', choices=['projection', 'implicit'],
+parser.add_argument('--loss', type=str, default='projection', choices=['projection', 'implicit'],
                     help='MLS Projection or implicit MLS')
+parser.add_argument('--refine', type=bool, default=True, help='refine the 0-isosurface')
+parser.add_argument('--alpha', type=float, default=0.01, help='refine weights')
 
 parser.add_argument('--name', type=str, default='base')
 parser.add_argument('--summary_freq', type=int, default=1)
@@ -87,6 +89,7 @@ if __name__ == '__main__':
         net.train()
         loss_sum = RunningAverage()
         IGR_loss_sum = RunningAverage()
+        refine_loss_sum = RunningAverage()
         iter_num = 0
         with tqdm.tqdm(total=len(train_dl), desc='train loop') as tq:
             for i, (t, q, lambda_p, proxy) in enumerate(train_dl):
@@ -133,16 +136,17 @@ if __name__ == '__main__':
                     project_dist = ((x.unsqueeze(2) - t) * neigh_grad).sum(3)
                     imls_dist = (project_dist * weight).sum(2, keepdim=True)
                     loss = criterion(imls_dist, sdf)
-
-                # q_moved = q - q_grad * sdf
-                # q_moved_sdf = net(q_moved)
-                # q_moved_sdf.sum().backward(retain_graph=True)
-                # q_moved_grad = q_moved.grad.detach()  # (1, 500, 3)
-                # q_moved_grad = F.normalize(q_moved_grad, dim=2)
-                # consis_constraint = 1 - F.cosine_similarity(q_moved_grad, q_grad, dim=-1)
-                # weight_moved = torch.exp(-10.0 * torch.abs(sdf)).reshape(-1, consis_constraint.shape[-1])
-                # consis_constraint = weight_moved * consis_constraint
-                # loss = loss + 0.01 * consis_constraint.mean()
+                if args.refine:
+                    q_moved = q.detach() - q_grad * sdf.detach()
+                    q_moved.requires_grad = True
+                    q_moved_sdf = net(q_moved)
+                    q_moved_sdf.sum().backward(retain_graph=True)
+                    q_moved_grad = q_moved.grad.detach()  # (1, 500, 3)
+                    q_moved_grad = F.normalize(q_moved_grad, dim=2)
+                    consis_constraint = 1 - F.cosine_similarity(q_moved_grad, q_grad, dim=-1)
+                    weight_moved = torch.exp(-10.0 * torch.abs(sdf)).reshape(-1, consis_constraint.shape[-1])
+                    consis_constraint = (weight_moved * consis_constraint).mean()
+                    loss = loss + args.alpha * consis_constraint
 
                 optimizer.zero_grad()
                 loss.backward()
@@ -150,10 +154,11 @@ if __name__ == '__main__':
 
                 # update loss
                 loss_sum.update(loss.detach().cpu().item())
+                refine_loss_sum.update(consis_constraint.detach().cpu().item())
                 del loss, q_grad, neigh_sdf, neigh_grad
-                tq.set_postfix(loss='{:05.4f}'.format(loss_sum()))
+                tq.set_postfix(loss='{:05.4f}'.format(loss_sum()), refine_loss='{:05.4f}'.format(refine_loss_sum()))
                 tq.update()
-        print('epoch: {}, loss: {}'.format(epoch, loss_sum()))
+        print('epoch: {}, loss: {}, refine loss: {}'.format(epoch, loss_sum(), refine_loss_sum()))
 
         # save temp results
         if epoch % args.summary_freq == 0:
