@@ -70,7 +70,7 @@ class PointGenerateDataset(data.Dataset):
             self.gt_pts_num = 20000
         print("gt_pts_num:", self.gt_pts_num)
         if query_num is None:
-            self.query_num = 1e6 // self.gt_pts_num
+            self.query_num = int(1e6 // self.gt_pts_num)
         else:
             self.query_num = query_num
         print('query_num per input point:', self.query_num)
