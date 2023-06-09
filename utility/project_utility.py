@@ -107,5 +107,7 @@ def eval_reconstruct_gt_mesh_p2s(rec_mesh: trimesh.Trimesh, gt_mesh: trimesh.Tri
 
         return chamfer_dist
 
+    rec_mesh = normalize_mesh_export(rec_mesh, get_scale=False)
+    gt_mesh = normalize_mesh_export(gt_mesh, get_scale=False)
     chamfer_dist = _chamfer_distance_single_file(rec_mesh, gt_mesh, sample_num)
     return chamfer_dist
