@@ -40,7 +40,7 @@ parser.add_argument('--pts_dir', type=str, default='data/ori_bunny.xyz.npy')
 parser.add_argument('--beta', type=int, default=1000,
                     help='beta for the softplus (sometimes need to be 0 avoiding over-smooth)')
 parser.add_argument('--skip_in', type=int, default=4)
-parser.add_argument('--loss', type=str, default='projection', choices=['projection', 'implicit'],
+parser.add_argument('--loss', type=str, default='implicit', choices=['projection', 'implicit'],
                     help='MLS Projection or implicit MLS')
 parser.add_argument('--refine', type=bool, default=True, help='refine the 0-isosurface')
 parser.add_argument('--alpha', type=float, default=0.01, help='refine weights')
