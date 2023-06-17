@@ -76,7 +76,7 @@ We greatly appreciate @**[ErlerPhilipp](https://github.com/ErlerPhilipp)** for h
 If you use our work, please cite our paper:
 
 ```bibtex
-@ARTICLE{neuralimls2022wang,
+@ARTICLE{neuralimls2023wang,
   author={Wang, Zixiong and Wang, Pengfei and Wang, Pengshuai and Dong, Qiujie and Gao, Junjie and Chen, Shuangmin and Xin, Shiqing and Tu, Changhe and Wang, Wenping},
   journal={IEEE Transactions on Visualization and Computer Graphics}, 
   title={Neural-IMLS: Self-supervised Implicit Moving Least-Squares Network for Surface Reconstruction}, 
