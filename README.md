@@ -55,7 +55,7 @@ To evaluate the model, run:
 python test.py --model_path <path_to_trained_model> --name <experiment_name> --mesh_path <path_to_gt_mesh>
 ```
 
-For example:
+For example (may need to tune the parameter weight_norm=False in network/IDRNet.py):
 ```bash
 python test.py --model_path experiment/famous_noisefree_Armadillo/epoch_35.pth --name famous_noisefree_Armadillo --mesh_path mesh/Armadillo.obj
 ```
