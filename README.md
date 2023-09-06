@@ -8,7 +8,7 @@ The official implementation of Neural-IMLS.
 
 This is the code for directly training neural implicit representations from unoriented noisy 3D point clouds.
 
-It allows training, testing and evaluate the tasks of surface reconstruction.
+It allows training, testing, and evaluate the tasks of surface reconstruction.
 
 We provide the code for training and testing a new model on your own data. Besides, we provide some reconstruction results of our method.
 
@@ -43,7 +43,7 @@ Here are some important parameters:
 - --patch_radius, ball radius nearest neighbor (FRNN) for MLS, large patch radius brings the smoother results
 - --points_per_patch_max, max number of points in a ball, collocation with patch radius
 - --k, kth nearest neighbor for MLS, less than 0 means leverage FRNN otherwise KNN
-- --loss, MLS Projection, or implicit MLS. Projection MLS is recommended for some thin structures and single layers geometry, while implicit MLS is recommended for most cases.
+- --loss, MLS Projection, or implicit MLS. Projection MLS is recommended for some thin structures and single-layer geometry, while implicit MLS is recommended for most cases.
   - Note that we found it should leverage KNN rather than FRNN for projection MLS.
 
 
@@ -55,7 +55,7 @@ To evaluate the model, run:
 python test.py --model_path <path_to_trained_model> --name <experiment_name> --mesh_path <path_to_gt_mesh>
 ```
 
-For example (may need to tune the parameter weight_norm=False in network/IDRNet.py):
+For example (may need to tune the parameter weight_norm=False in network/IDRNet.py with pre-trained models):
 ```bash
 python test.py --model_path experiment/famous_noisefree_Armadillo/epoch_35.pth --name famous_noisefree_Armadillo --mesh_path mesh/Armadillo.obj
 ```
