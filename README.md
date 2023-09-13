@@ -1,5 +1,8 @@
 # Neural-IMLS
 
+Code of Neural-IMLS: Self-supervised Implicit Moving Least-Squares Network for Surface Reconstruction. IEEE Transactions on Visualization and Computer Graphics (TVCG).
+
+
 The official implementation of Neural-IMLS.
 
 [Arxiv](https://arxiv.org/abs/2109.04398)  [PDF](https://ieeexplore.ieee.org/document/10146518)
